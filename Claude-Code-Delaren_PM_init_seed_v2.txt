@@ -1,0 +1,220 @@
+1) NORTH STAR & SCOPE
+North Star
+Launch a production‑grade, bilingual (ES‑first, EN‑supported) automation stack for Delaren Consulting that:
+  (a) answers and routes phone calls via a Voice AI agent and
+  (b) captures, qualifies, books, and follows up via WhatsApp Business—
+as an internal showcase + reusable template for client work.
+
+In‑Scope (v1)
+- Voice AI Agent (inbound; optional outbound pilot) to handle FAQs, qualify, capture contacts, schedule intro calls; escalate to human; log summaries into CRM.
+- WhatsApp (WABA) flows to auto‑reply, qualify, book, follow up, and run newsletters/broadcasts.
+- Lightweight CRM (Google Sheets primary; Notion alt) + Google Calendar booking.
+- Bilingual content (ES primary/CDMX, EN secondary/Canada).
+- Cost guardrails + measurable KPIs.
+
+Out‑of‑Scope (v1)
+- Complex CRM migrations; custom backend; multi‑tenant portal.
+- Payment processing; additional channels beyond Phone + WhatsApp.
+
+----------------------------------------------------------------
+2) TARGETS & KPI BASELINES
+Primary market: CDMX (Condesa/Roma Norte) service SMBs (clinics, home services, salons, restaurants).
+Secondary: Vancouver EN tests.
+
+KPI dashboard (CSV/Sheet):
+- Leads per month
+- Voice agent containment % (no human escalation)
+- Booking rate (lead → booked call)
+- Show‑up rate
+- Close rate (for sales‑qualified)
+- Avg response latency (call + WA)
+- WA session cost / Telco cost per qualified lead
+- Time‑to‑first‑value (days to first booked call)
+Initial approach: establish baselines in Sprint 1; target +20% improvement across two sprints.
+
+----------------------------------------------------------------
+2b) CONTEXT ENGINEERING PRINCIPLES (how we feed Claude Code)
+- Hierarchical organization: project → phase → task contexts.
+- Progressive enhancement: start with core docs; add detail as we learn; prune stale info.
+- Strategic referencing: keep the AI focused on the few relevant files per task.
+(We’ll keep data in repository files so “project memory” evolves from each interaction.)
+
+----------------------------------------------------------------
+3) DELIVERY PLAN — 3 SPRINTS (2 weeks each)
+Sprint 1 — Foundation (Weeks 1–2)
+- PRIMARY voice stack: Telnyx Voice AI Agents (full stack). ALT: Knotie.ai (whitelabel) + Retell.
+- Provision numbers; enable consent/recording; write ES/EN call scripts (FAQ, qualify, book, escalate).
+- Stand up WABA via LancePilot BSP; submit first 3–4 HSM templates (ES/EN).
+- Spin up CRM (Sheets or Notion), Google Calendar, and basic webhooks (Zapier/Make) for events.
+- Build KPI & Cost dashboard skeleton.
+- Produce internal demo (call + WA) videos.
+
+Sprint 2 — Pilot (Weeks 3–4)
+- Appointment booking integration; escalation‑to‑human fallback.
+- Expand WA flows (abandoned inquiry, reminder nudge, post‑call follow‑up).
+- Analytics instrumentation (summaries, tagging, outcomes).
+- A/B two voice personas; evaluate ES/EN code‑switching.
+- Draft GTM assets: one‑pager + demo script + price guardrails.
+
+Sprint 3 — Scale & Package (Weeks 5–6)
+- Harden prompts, guardrails; add error handling/retries.
+- Cost review; optimize session policies/caching.
+- SOPs/playbooks; exportable templates for new clients.
+- Final showcase: recorded demo + KPI summary.
+
+----------------------------------------------------------------
+4) TECH STACK & INTEGRATIONS
+Voice AI
+- PRIMARY: Telnyx Voice AI Agents (telephony + orchestration).
+- ALT: Knotie.ai (whitelabel) + Retell AI (fast iteration track).
+- STT/TTS: provider‑native by default; consider ElevenLabs/Azure later.
+- LLM: Claude Code 2.x for planning/reasoning; allow model routing by task.
+
+WhatsApp
+- BSP: LancePilot (whitelabel). Use verified number(s).
+- Templates (bilingual): lead_capture_intro, booking_reminder, post_consult_followup, promo_newsletter_optin.
+
+Shared
+- Calendar: Google Calendar (primary).
+- CRM: Google Sheets (primary) or Notion (alt).
+- Automation: Zapier or Make; webhooks for call & WA events.
+- Storage/retention: transcripts/audio 30 days by default (adjustable).
+
+----------------------------------------------------------------
+4b) `/init` WORKFLOW (using this seed file)
+- Place this TXT in the project root and start Claude Code CLI in that folder.
+- Load the seed in‑session by referencing the filename (or paste contents).
+- Run `/init` to generate `.Claude Code/Claude Code.md` tailored to this context.
+- Initialization nudge prompt (if needed):
+  “Analyze the seed file and repo structure; create `.Claude Code/Claude Code.md` with roles, DoD, KPIs,
+   and a task plan. Generate `docs/pm/project-overview.md` summarizing scope, risks, and next steps.”
+
+----------------------------------------------------------------
+5) KICKOFF PROMPTS (drop these into CLI as needed)
+Pre‑Mortem
+“Using the files in this folder, run a pre‑mortem. List plausible failure modes, probability/impact (1–5),
+owner, mitigations, deadlines, and dependencies. Save as `docs/pm/pre-mortem.md`.”
+
+SMART Objectives
+“Review our North Star and propose SMART sub‑goals. Identify missing specifics, metrics, achievability constraints, and time‑bounds. Save as `docs/pm/objectives.md`.”
+
+Stakeholders & Comms
+“Propose a stakeholder list (roles/interests/concerns) and a lightweight comms plan (frequency, channels, content). Save as `docs/pm/stakeholders.md` and `docs/pm/comms-plan.md`.”
+
+----------------------------------------------------------------
+6) WBS & GANTT (living plan)
+WBS
+“Generate a WBS from scope/objectives. Include dependencies and estimated durations. Save as `docs/pm/wbs.md`.”
+
+Gantt
+“Produce a Gantt (CSV) from the WBS with tasks, durations, dependencies, and milestones.
+Create three variants for scenario planning:
+  - timeline-optimistic.csv  (80% of durations)
+  - timeline-realistic.csv   (100%)
+  - timeline-pessimistic.csv (120%)
+Summarize end dates, resource peaks, and cost implications in `docs/pm/schedule-summary.md`.”
+
+----------------------------------------------------------------
+7) GOVERNANCE & DoD
+Roles (RACI)
+- Alfredo: Account/PM (R/A), Tech Lead (R), QA (R), Content/UX (R).
+- Future contractor(s): QA peer review (C), Copy review (C).
+
+Definition of Done (apply to each deliverable)
+- KPI attached and measurable
+- Demo script + checklist included
+- Consent & privacy reviewed (recording disclosure in scripts)
+- Cost run‑rate logged
+- Accessibility check (low‑vision friendly docs, clear transcripts)
+- Rollback/disable plan documented
+
+----------------------------------------------------------------
+8) RISKS / RAID (seed)
+- R: Telephony latency/quality per region/provider.
+- R: WA template rejections delay launch.
+- A: Missing KPI updates → blind spots.
+- I: Cost overruns from verbose prompts/retries.
+- D: Lock PRIMARY stack after Sprint‑1 data; cap WA monthly spend.
+Mitigations: keep ALT stack ready; pre‑approve HSMs early; weekly cost review; concise prompts; spend alerts.
+
+----------------------------------------------------------------
+9) REPO STRUCTURE (after `/init`)
+/docs
+  /voice/
+  /whatsapp/
+  /pm/            (roadmaps, RACI, RAID, decision log)
+  /playbooks/     (SOPs, runbooks)
+  /templates/     (prompts, HSM, call scripts)
+  /integrations/  (API specs, secrets.sample)
+/.Claude Code/         (Claude Code.md; project memories)
+/tasks/           (backlog.yaml, milestones.yaml)
+
+VS Code extensions: Markdown All in One, REST Client, GitLens, Draw.io Integration.
+
+----------------------------------------------------------------
+10) CONSENT & COMPLIANCE (boilerplate)
+Voice opening (ES):
+“Hola, te habla el asistente virtual de Delaren Consulting. Esta llamada puede ser grabada para mejorar el servicio. ¿Puedo ayudarte con información o agendar una cita?”
+EN:
+“Hi, this is Delaren Consulting’s virtual assistant. This call may be recorded to improve service. How can I help, or would you like to book a call?”
+Retention defaults: transcripts/audio 30 days; PII limited to contact + booking context; use provider encryption‑at‑rest.
+
+----------------------------------------------------------------
+11) BACKLOG SEEDS
+- [voice] Provision telco numbers; enable consent/recording
+- [voice] Draft/test ES/EN scripts; add escalation to human
+- [voice] Webhooks → Sheets/Notion lead log + summary
+- [wa] Connect LancePilot BSP; verify WABA & number
+- [wa] Submit 4 HSM templates (ES/EN); build auto‑reply + booking
+- [crm] Choose Sheets or Notion; define lead schema + pipeline
+- [ops] KPI dashboard (CSV/Sheet) + cost run‑rate report
+- [qa] A/B test 2 voice personas (latency, clarity, ratings)
+- [docs] SOPs: daily checks, incident response, escalation, rollback
+- [gtm] Sales kit: 1‑pager + demo script + pricing guardrails
+
+----------------------------------------------------------------
+12) PROJECT PORTAL (deployment options)
+- Static.run for quick free hosting (throw‑away demo)
+- GitHub Pages for a simple permanent portal (README + instructions + .gitignore)
+- Vercel for dynamic portals with env vars + custom domains
+Ask Claude Code to generate the /docs/portal files and a `github-deployment-guide.md` as needed.
+
+----------------------------------------------------------------
+13) MONITORING & REPORTING PROMPTS
+“Identify KPIs; set baselines/targets; propose collection cadence and chart specs; generate `docs/pm/kpis.md`.”
+“Analyze weekly KPI CSVs; flag anomalies/trends; propose actions; output `docs/pm/status-[date].md`.”
+
+----------------------------------------------------------------
+14) CLOSING & EVALUATION PROMPTS
+“Run a closure checklist; verify deliverables vs DoD; compile lessons learned and improvement recommendations; produce `docs/pm/closure-report.md`.”
+
+----------------------------------------------------------------
+15) SECRETS & ENV (sample; do not commit)
+TELCO_API_KEY=
+RETELL_API_KEY=
+WABA_BSP_KEY=
+GOOGLE_SHEETS_CREDS_PATH=
+ZAPIER_HOOK_URL=
+Claude Code_API_KEY=
+
+----------------------------------------------------------------
+16) Claude Code WORKING GUIDELINES (to embed in Claude Code.md)
+- Inside this repo, behave as PM/solutions architect.
+- Prefer ES (CDMX); provide EN variants on request.
+- When generating scripts/templates, include: purpose, inputs, outputs, test checklist.
+- Favor PRIMARY/ALT stacks before proposing new tools.
+- Keep prompts concise to manage cost/latency; log token/usage when available.
+- After significant changes, propose doc + backlog updates.
+- Enforce DoD before marking any task “done”.
+
+----------------------------------------------------------------
+17) SUCCESS EXIT CRITERIA (v1)
+- Live Voice AI answering during business hours with ≥70% containment.
+- WA auto‑reply + booking live; 3+ HSM templates approved.
+- ≥5 internal booked calls within 30 days at acceptable cost.
+- Demo assets (voice + WA) recorded and packaged for sales.
+"""
+path = "/mnt/data/Delaren_PM_init_seed_v2.txt"
+with open(path, "w", encoding="utf-8") as f:
+    f.write(revised)
+print(f"Saved to {path}")
